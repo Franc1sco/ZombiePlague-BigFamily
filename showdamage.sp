@@ -1,4 +1,5 @@
 #include <sourcemod>
+#include <sdkhooks>
 #include <zombieplague>
  
 #pragma semicolon 1
