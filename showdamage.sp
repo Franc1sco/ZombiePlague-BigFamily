@@ -30,16 +30,12 @@ public void OnClientPutInServer(int client)
 
 public Action Hook_OnTakeDamage(int victim, int &attacker, int &inflictor, float &damage, int &damagetype)
 {
-    PrintToConsole(attacker, "evento hurt");
- 
     if (IsValidClient(attacker) && attacker != victim && victim != 0)
     {
-    	PrintToConsole(attacker, "evento hurt pasado");
         if(ZP_IsPlayerHuman(attacker))
         {
-			PrintToConsole(attacker, "evento hurt pasado y hecho");
 			SetHudTextParams(-1.0, 0.45, 1.3, 255, 0, 0, 200, 1);
-			ShowHudText(attacker, -1, "%f", damage);
+			ShowHudText(attacker, 1, "%i", RoundToNearest(damage));
         }
     }
 } 
