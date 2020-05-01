@@ -13,10 +13,19 @@ public Plugin myinfo =
     version = "",
     url = ""
 };
- 
+
+int vida_inicio[MAXPLAYERS];
+
 public void OnPluginStart()
 {
+    for (int i = 1; i <= MaxClients; i++) 
+		if(IsClientInGame(i)) 
+			OnClientPutInServer(i);
+}
 
+public void OnClientPutInServer(int client)
+{
+   	SDKHook(client, SDKHook_TraceAttack, TraceAttack);
 }
 
 public void ZP_OnClientDamaged(int client, int attacker, int inflicter, float damage, int bits, int weapon, int health, int armor)
@@ -25,10 +34,18 @@ public void ZP_OnClientDamaged(int client, int attacker, int inflicter, float da
 	{
 		float randomY = GetRandomFloat(0.46, 0.43);
 		float randomX = GetRandomFloat(0.48, 0.52);
-    			
+    	int vida_despues = GetClientHealth(client);
+    	
+    	int vida_total = vida_despues - vida_inicio[inflicter];
+    	
 		SetHudTextParams(randomX, randomY, 2.0, 30,144,255, 50, 1);
-		ShowHudText(attacker, 5, "%i", RoundToNearest(damage));
+		ShowHudText(attacker, 5, "%i", vida_total);
 	}
+}
+
+public Action TraceAttack(int victim, int &attacker, int &inflictor, float &damage, int &damagetype, int &ammotype, int hitbox, int hitgroup)
+{
+    vida_inicio[victim] = GetClientHealth(victim);
 }
 
 stock bool IsValidClient(int client, bool bots = true, bool dead = true)
