@@ -32,7 +32,7 @@ public void ZP_OnClientDamaged(int client, int attacker, int inflicter, float da
 {
 	if(ZP_IsPlayerHuman(attacker))
 	{
-		PrintToConsole(client, "Vida actual antes del daño es %i", GetClientHealth(client));
+		PrintToConsole(attacker, "Vida actual antes del daño es %i", GetClientHealth(client));
 		DataPack pack;
 		CreateDataTimer(0.0, Timer_Pasado, pack);
 		pack.WriteCell(GetClientUserId(client));
