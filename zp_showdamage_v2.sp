@@ -32,6 +32,7 @@ public void OnClientPutInServer(int client)
 public void ZP_OnClientValidateDamage(int client, int &attacker, int &inflicter, float &damage, int &bits, int &weapon)
 {
 	vida_inicio[client] = GetClientHealth(client);
+	PrintToConsole(client, "Vida actual antes del daño es %i", vida_inicio[client]);
 }
 
 public void ZP_OnClientDamaged(int client, int attacker, int inflicter, float damage, int bits, int weapon, int health, int armor)
@@ -42,7 +43,9 @@ public void ZP_OnClientDamaged(int client, int attacker, int inflicter, float da
 		float randomX = GetRandomFloat(0.48, 0.52);
 		int vida_despues = GetClientHealth(client);
     	
+		PrintToConsole(client, "Vida despues del daño es %i", vida_despues);
 		int vida_total = vida_inicio[client] - vida_despues;
+		PrintToConsole(client, "Resta total es %i", vida_total);
     	
 		SetHudTextParams(randomX, randomY, 2.0, 30,144,255, 50, 1);
 		ShowHudText(attacker, 5, "%i", vida_total);
