@@ -14,8 +14,6 @@ public Plugin myinfo =
     url = ""
 };
 
-int vida_inicio[MAXPLAYERS];
-
 /*
 public void OnPluginStart()
 {
@@ -29,20 +27,17 @@ public void OnClientPutInServer(int client)
    	SDKHook(client, SDKHook_TraceAttack, TraceAttack);
 }
 */
-public void ZP_OnClientValidateDamage(int client, int &attacker, int &inflicter, float &damage, int &bits, int &weapon)
-{
-	vida_inicio[client] = GetClientHealth(client);
-	PrintToConsole(client, "Vida actual antes del daño es %i", vida_inicio[client]);
-}
 
 public void ZP_OnClientDamaged(int client, int attacker, int inflicter, float damage, int bits, int weapon, int health, int armor)
 {
 	if(ZP_IsPlayerHuman(attacker))
 	{
+		PrintToConsole(client, "Vida actual antes del daño es %i", GetClientHealth(client));
 		DataPack pack;
-		CreateDataTimer(0.1, Timer_Pasado, pack);
+		CreateDataTimer(0.0, Timer_Pasado, pack);
 		pack.WriteCell(GetClientUserId(client));
 		pack.WriteCell(GetClientUserId(attacker));
+		pack.WriteCell(GetClientHealth(client));
 	
 	}
 }
@@ -52,6 +47,7 @@ public Action Timer_Pasado(Handle timer, DataPack pack)
 	pack.Reset();
 	int id = pack.ReadCell();
 	int idattacker = pack.ReadCell();
+	int vidaantes = pack.ReadCell();
     
 	int client = GetClientOfUserId(id);
 	int attacker = GetClientOfUserId(idattacker);
@@ -60,13 +56,16 @@ public Action Timer_Pasado(Handle timer, DataPack pack)
 	
 	if (!IsValidClient(attacker))return;
 	
+	
+	
 	float randomY = GetRandomFloat(0.46, 0.43);
 	float randomX = GetRandomFloat(0.48, 0.52);
+	
 	int vida_despues = GetClientHealth(client);
     	
-	PrintToConsole(client, "Vida despues del daño es %i", vida_despues);
-	int vida_total = vida_inicio[client] - vida_despues;
-	PrintToConsole(client, "Resta total es %i", vida_total);
+	PrintToConsole(attacker, "Vida despues del daño es %i", vida_despues);
+	int vida_total = vidaantes - vida_despues;
+	PrintToConsole(attacker, "Resta total es %i", vida_total);
     	
 	SetHudTextParams(randomX, randomY, 2.0, 30,144,255, 50, 1);
 	ShowHudText(attacker, 5, "%i", vida_total);
